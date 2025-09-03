@@ -1,9 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
     id("com.google.devtools.ksp")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -18,12 +16,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Debug configuration for library (usually empty)
+        }
         release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            // Library modules don't need ProGuard configuration
+            // Rules are handled by the consuming app module
         }
     }
 
@@ -42,14 +40,9 @@ android {
 dependencies {
     implementation(project(":domain"))
 
-    // Core Android
     implementation(libs.androidx.core.ktx)
-
-    // Coroutines
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-
-    // Networking
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
     implementation(libs.okhttp)
@@ -57,15 +50,9 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     ksp(libs.moshi.codegen)
-
-    // Dependency Injection
-    implementation(libs.dagger.hilt)
-    kapt(libs.dagger.hilt.compiler)
-
-    // Paging
+    implementation(libs.javax.inject)
     implementation(libs.paging.runtime)
 
-    // Testing
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)

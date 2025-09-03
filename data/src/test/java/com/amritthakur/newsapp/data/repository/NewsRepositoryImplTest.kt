@@ -349,7 +349,7 @@ class NewsRepositoryImplTest {
     @Test
     fun `getCountries should return error when local data source throws exception`() = runTest {
         // Given
-        val exception = kotlin.RuntimeException("Local data error")
+        val exception = RuntimeException("Local data error")
         coEvery { mockNewsLocalDataSource.getCountries() } throws exception
 
         // When
@@ -419,7 +419,7 @@ class NewsRepositoryImplTest {
     @Test
     fun `getLanguages should return error when local data source throws exception`() = runTest {
         // Given
-        val exception = kotlin.RuntimeException("Local data error")
+        val exception = RuntimeException("Local data error")
         coEvery { mockNewsLocalDataSource.getLanguages() } throws exception
 
         // When
