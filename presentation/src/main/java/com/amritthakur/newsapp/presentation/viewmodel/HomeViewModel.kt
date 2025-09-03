@@ -1,5 +1,6 @@
 package com.amritthakur.newsapp.presentation.viewmodel
 
+import androidx.lifecycle.ViewModel
 import com.amritthakur.newsapp.presentation.navigation.NavigationChannel
 import com.amritthakur.newsapp.presentation.navigation.NavigationEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ interface HomeOutput
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val navigationChannel: NavigationChannel
-) : HomeInput, HomeOutput {
+) : ViewModel(), HomeInput, HomeOutput {
 
     override val onTopHeadLines: () -> Unit = {
         navigationChannel.postEvent(HomeNavigationEvent.NavigateToTopHeadlines)

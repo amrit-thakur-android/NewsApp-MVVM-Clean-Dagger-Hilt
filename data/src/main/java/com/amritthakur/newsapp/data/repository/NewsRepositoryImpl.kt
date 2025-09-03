@@ -16,8 +16,9 @@ import com.amritthakur.newsapp.domain.entity.NewsParams
 import com.amritthakur.newsapp.domain.entity.Source
 import com.amritthakur.newsapp.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class NewsRepositoryImpl(
+class NewsRepositoryImpl @Inject constructor(
     private val newsRemoteDataSource: NewsRemoteDataSource,
     private val newsLocalDataSource: NewsLocalDataSource
 ) : NewsRepository {
