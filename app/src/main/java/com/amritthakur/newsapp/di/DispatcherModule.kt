@@ -14,7 +14,7 @@ class DispatcherModule {
 
     @Provides
     @Singleton
-    fun bindDispatcherProvider(): DispatcherProvider {
+    fun provideDispatcherProvider(): DispatcherProvider {
         return DefaultDispatcherProvider()
     }
 }

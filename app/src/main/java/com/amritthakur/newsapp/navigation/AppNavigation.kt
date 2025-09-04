@@ -6,16 +6,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.amritthakur.newsapp.presentation.navigation.NavigationChannel
 import com.amritthakur.newsapp.presentation.navigation.NavigationCoordinator
 import com.amritthakur.newsapp.presentation.navigation.Screen
 import com.amritthakur.newsapp.presentation.screen.CountriesScreen
@@ -24,14 +22,16 @@ import com.amritthakur.newsapp.presentation.screen.LanguagesScreen
 import com.amritthakur.newsapp.presentation.screen.NewsScreen
 import com.amritthakur.newsapp.presentation.screen.SearchScreen
 import com.amritthakur.newsapp.presentation.screen.SourcesScreen
-import com.amritthakur.newsapp.presentation.viewmodel.HomeViewModel
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.amritthakur.newsapp.presentation.navigation.NavigationChannel
 import com.amritthakur.newsapp.presentation.viewmodel.CountriesViewModel
+import com.amritthakur.newsapp.presentation.viewmodel.HomeViewModel
 import com.amritthakur.newsapp.presentation.viewmodel.LanguagesViewModel
 import com.amritthakur.newsapp.presentation.viewmodel.NewsViewModel
 import com.amritthakur.newsapp.presentation.viewmodel.SearchViewModel
 import com.amritthakur.newsapp.presentation.viewmodel.SourcesViewModel
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
@@ -48,7 +48,6 @@ fun AppNavigation(
     val navController = rememberNavController()
     val navigationCoordinator = remember { NavigationCoordinator(navController) }
 
-    // Get NavigationChannel from Hilt
     val navigationChannel = remember {
         EntryPointAccessors.fromApplication(
             context.applicationContext,
@@ -56,8 +55,8 @@ fun AppNavigation(
         ).navigationChannel()
     }
 
-    // Observe navigation events
-    val navigationEvent by navigationChannel.navigationEvent.collectAsStateWithLifecycle()
+    val navigationEvent by navigationChannel.navigationEvent
+        .collectAsStateWithLifecycle()
 
     LaunchedEffect(navigationEvent) {
         navigationEvent?.let { event ->
@@ -73,7 +72,7 @@ fun AppNavigation(
     ) {
 
         composable(Screen.Home.route) {
-            val homeViewModel : HomeViewModel = hiltViewModel()
+            val homeViewModel: HomeViewModel = hiltViewModel()
             HomeScreen(
                 input = homeViewModel,
                 output = homeViewModel
@@ -104,7 +103,7 @@ fun AppNavigation(
             val country = backStackEntry.arguments?.getString("country")
             val language = backStackEntry.arguments?.getString("language")
 
-            val newsViewModel : NewsViewModel = hiltViewModel()
+            val newsViewModel: NewsViewModel = hiltViewModel()
             newsViewModel.updateParams(source, country, language)
             NewsScreen(
                 input = newsViewModel,
@@ -113,7 +112,7 @@ fun AppNavigation(
         }
 
         composable(Screen.Sources.route) {
-            val sourcesViewModel : SourcesViewModel = hiltViewModel()
+            val sourcesViewModel: SourcesViewModel = hiltViewModel()
             SourcesScreen(
                 input = sourcesViewModel,
                 output = sourcesViewModel
@@ -121,7 +120,7 @@ fun AppNavigation(
         }
 
         composable(Screen.Countries.route) {
-            val countriesViewModel : CountriesViewModel = hiltViewModel()
+            val countriesViewModel: CountriesViewModel = hiltViewModel()
             CountriesScreen(
                 input = countriesViewModel,
                 output = countriesViewModel
@@ -129,7 +128,7 @@ fun AppNavigation(
         }
 
         composable(Screen.Languages.route) {
-            val languagesViewModel : LanguagesViewModel = hiltViewModel()
+            val languagesViewModel: LanguagesViewModel = hiltViewModel()
             LanguagesScreen(
                 input = languagesViewModel,
                 output = languagesViewModel
@@ -137,7 +136,7 @@ fun AppNavigation(
         }
 
         composable(Screen.Search.route) {
-            val searchViewModel : SearchViewModel = hiltViewModel()
+            val searchViewModel: SearchViewModel = hiltViewModel()
             SearchScreen(
                 input = searchViewModel,
                 output = searchViewModel
