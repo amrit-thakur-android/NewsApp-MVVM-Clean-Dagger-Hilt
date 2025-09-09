@@ -1,42 +1,74 @@
-# News App - MVVM Clean Architecture with Dagger Hilt
+# NewsApp – MVVM + Clean Architecture + Dagger Hilt (Jetpack Compose)
 
-A modern Android news application built with Clean Architecture, MVVM pattern, and Dagger Hilt.
+A modular Android app that consumes the NewsAPI.org API to display news. Built with Clean Architecture, MVVM, and Jetpack Compose with Dagger Hilt for dependency injection.
+
+## Modules
+- app: Android entry point, DI setup, app-level configs
+- domain: Pure Kotlin business logic (entities, use cases, repositories interfaces)
+- data: Repository implementations, Retrofit API, DTOs, paging, and utilities
+- presentation: Jetpack Compose UI, ViewModels, navigation
+
+## Tech stack
+- Language: Kotlin
+- UI: Jetpack Compose, Material 3
+- Architecture: Clean Architecture + MVVM
+- DI: Dagger Hilt
+- Concurrency: Kotlin Coroutines + Flow
+- Networking: Retrofit, OkHttp, Moshi (code-gen)
+- Pagination: Paging 3 (runtime + compose)
+- Navigation: Navigation-Compose, Hilt Navigation Compose
+- Images: Coil 3 (OkHttp-backed)
+- AndroidX: Lifecycle (ViewModel/Runtime), Core KTX
+- Testing: JUnit4, MockK, Coroutines Test
 
 ## Features
+- Top headlines list with infinite scroll (Paging 3)
+- Search news
+- Browse by sources
+- Filter by country and language
+- Open article in browser Custom Tabs
 
-- Browse top headlines from various news sources
-- Search for specific news articles
-- Filter news by country and language
-- Browse news sources
-- Infinite scrolling with pagination
-- Open articles in Chrome Custom Tabs
+## Architecture overview
+- Domain (pure Kotlin): entities, use cases, repository interfaces. No Android deps.
+- Data: Retrofit service (`NewsApiService`), repository implementations, paging source, connectivity checks, Moshi DTOs.
+- Presentation: Compose screens, state holders (ViewModels), Hilt ViewModel injection, Navigation.
+- App: Hilt `@HiltAndroidApp` application, DI modules (e.g., `NetworkModule`) wiring Retrofit/OkHttp/Moshi.
 
-## Tech Stack
+Networking:
+- Base URL: https://newsapi.org/
+- OkHttp adds header `X-Api-Key` from `BuildConfig.NEWS_API_KEY` (see `app/src/main/java/.../di/NetworkModule.kt`).
 
-**Architecture**
-- Clean Architecture (4 modules: app, domain, data, presentation)
-- MVVM Pattern
-- Dagger Hilt for Dependency Injection
+## Setup
+1) Prerequisites
+   - Android Studio (latest stable)
+   - JDK 17 (required by AGP 8.x)
+   - Android SDK 24+ (compile/target SDK 36)
 
-**UI**
-- Jetpack Compose
-- Material 3 Design
-- Navigation Compose
+2) NewsAPI key
+   - Get a free API key from https://newsapi.org
+   - Update the placeholder in `app/build.gradle.kts`:
+     - `buildConfigField("String", "NEWS_API_KEY", "\"YOUR_KEY\"")`
+   - Rebuild/sync after changing the key
 
-**Networking**
-- Retrofit
-- OkHttp
-- Moshi for JSON parsing
-- NewsAPI
+3) Run
+   - Open the project in Android Studio
+   - Sync Gradle and select a device
+   - Run the `app` configuration
 
-**Other Libraries**
-- Kotlin Coroutines & Flow
-- Jetpack Paging 3
-- Coil for image loading
-- Chrome Custom Tabs
+4) CLI
+- Build debug: `./gradlew :app:assembleDebug`
+- Run unit tests: `./gradlew test`
 
-**Testing**
-- JUnit 4
-- MockK
-- Coroutines Test
-- Espresso
+## Module boundaries
+- presentation depends on domain (UI + ViewModels only)
+- data depends on domain (implements repositories)
+- app depends on domain, data, presentation (wires DI + app configs)
+
+## Notes
+- Release signing config in the sample is placeholder-only. Replace with your own keystore when publishing.
+- For localization, only English resources are packaged in this sample for smaller APK size.
+
+## Reference
+This project structure follows the same spirit as:
+- https://github.com/amrit-thakur-android/NewsApp-MVVM-Clean-Dagger
+
